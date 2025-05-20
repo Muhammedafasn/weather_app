@@ -7,24 +7,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:havadurumu/main.dart';
+import 'package:weather_app/main.dart';
+import 'package:weather_app/home_page.dart';
+import 'package:weather_app/widgets/daily_weather_card.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('App smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the app starts with the home page
+    expect(find.byType(MyHomePage), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('DailyWeatherCard test', (WidgetTester tester) async {
+    // Create a test CardDailyItem
+    final testItem = CardDailyItem(
+      temperature: 25.5,
+      icon: '01d',
+      date: '2024-03-20 12:00:00',
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Build the widget
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: DailyWeatherCard(cardDailyItem: testItem),
+        ),
+      ),
+    );
+
+    // Verify that the card displays the correct information
+    expect(find.text('20/3/2024 12:00'), findsOneWidget);
+    expect(find.text('25.5° C'), findsOneWidget);
   });
 }

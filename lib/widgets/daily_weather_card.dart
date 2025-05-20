@@ -1,45 +1,54 @@
 import 'package:flutter/material.dart';
+import '../utils.dart';
 
-class CardDailyItem{
-  String icon;
-  double temperature;
-  String date;
-  CardDailyItem({required this.icon, required this.temperature, required this.date});
+class CardDailyItem {
+  final double temperature;
+  final String icon;
+  final String date;
+
+  CardDailyItem({
+    required this.temperature,
+    required this.icon,
+    required this.date,
+  });
 }
 
 class DailyWeatherCard extends StatelessWidget {
-  const DailyWeatherCard({super.key, required this.cardDailyItem});
-
   final CardDailyItem cardDailyItem;
+
+  const DailyWeatherCard({
+    Key? key,
+    required this.cardDailyItem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    List<String> weekdays = [
-        'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'
-    ];
-
-    final String newDayText =  weekdays[ DateTime.parse(cardDailyItem.date).weekday - 1 ];
-
-    return  Card(
-      color: Colors.transparent,
-      elevation: 1,
+    return Card(
+      margin: const EdgeInsets.all(8.0),
       child: Container(
-        width: 100,
-        padding: EdgeInsets.only(bottom: 10),
+        width: 120,
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network('https://openweathermap.org/img/wn/${cardDailyItem.icon}@4x.png'),
             Text(
-              "${cardDailyItem.temperature}° C",
-              style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.w700),
+              formatDateTime(cardDailyItem.date),
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 8),
+            Image.network(
+              'https://openweathermap.org/img/wn/${cardDailyItem.icon}@2x.png',
+              width: 50,
+              height: 50,
+            ),
+            const SizedBox(height: 8),
             Text(
-              newDayText,
-              textAlign: TextAlign.center ,
+              formatTemperature(cardDailyItem.temperature),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
